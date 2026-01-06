@@ -1,0 +1,96 @@
+# Базовые файлы IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Файлы PyCharm
+.DS_Store
+*.pyc
+__pycache__/
+
+# Файлы Python
+*.py[cod]
+*$py.class
+
+# Файлы Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+media/
+db.sqlite3
+db.sqlite3-journal
+
+# Файлы Virtualenv
+env/
+venv/
+.venv/
+.python-version
+
+# Файлы сборки
+*.egg-info/
+dist/
+build/
+*.egg
+*.egg-info
+
+# Файлы документации
+_build/
+docs/_build/
+
+# Файлы кэша
+*.swp
+*.swo
+*.swn
+*.swm
+*.swl
+*.swk
+*.swj
+*.swi
+*.swh
+*.swg
+*.swf
+*.swd
+*.swc
+*.swb
+*.swa
+
+# Файлы логов
+logs/
+*.log
+*.out
+*.pid
+
+# Временные файлы
+*.tmp
+*.bak
+*.swp
+*~
+
+# Файлы настроек
+.env
+.env.local
+.env.development.local
+.env.production.local
+
+# Статические файлы
+staticfiles/
+node_modules/
+
+# Файлы отладки
+.vscode/
+.idea/
+.history/
+
+# Файлы миграции
+# Не игнорируйте, если используете контроль версий миграций
+# migrations/
+
+# Исключения
+!requirements.txt
+!requirements-dev.txt
+!README.md
+!LICENSE
+!setup.py
+!manage.py
