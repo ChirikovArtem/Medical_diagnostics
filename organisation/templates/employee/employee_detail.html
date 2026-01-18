@@ -1,0 +1,21 @@
+{% extends 'users/base.html' %}
+{% block content %}
+
+<section class="bg-light p-5 rounded mb-5">
+     <div class="text-center">
+        <h2>Сотрудник: {{ employee.first_name }} {{ employee.last_name }}</h2>
+    </div>
+     <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <img src="{{ employee.photo_employee.url }}" style="max-width: 300px; height: auto;">
+                <p>Должность: {{ employee.job_title }}</p>
+                <p>Описание: {{ employee.description }} </p>
+
+                <a href="{% url 'organisation:employee_list' %}" class="btn btn-primary">Вернуться к списку сотрудников</a>
+
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

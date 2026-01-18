@@ -1,0 +1,171 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<section class="bg-light p-5 rounded mb-5">
+    {% if object %}
+             <h2 class="text-center mb-4">Редактировать запись</h2>
+     {% else %}
+    <h2 class="text-center mb-4">Запись на услугу</h2>
+    {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <form method="post" enctype="multipart/form-data" id="registrationForm" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                <!-- Общие ошибки формы -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger mb-4">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Поля формы -->
+                {% for field in form %}
+                    {% if field.name != 'record' %} {# Поле выбора услуги обрабатываем отдельно #}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in field.errors %}
+                                        {{ error }}<br>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Скрытое поле выбранной услуги -->
+                {{ form.record }}
+
+                <!-- Блок с доступными услугами (услугами Record) -->
+                <div class="mt-4">
+                    <h3>Доступные услуги:</h3>
+                    <div id="availableRecords" class="row mt-3">
+                        <!-- Здесь динамически появятся услуги -->
+                    </div>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="d-flex justify-content-between mt-4">
+                    {% if object %}
+                        <button type="submit" class="btn btn-primary">Редактировать</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary">Записаться</button>
+                    {% endif %}
+                    <a href="{% url 'registration:personal_account' %}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateField = document.getElementById('id_date_registration');
+    const timeField = document.getElementById('id_time_registration');
+    const recordsContainer = document.getElementById('availableRecords');
+    const recordInput = document.getElementById('id_record');
+    const form = document.getElementById('registrationForm');
+
+    // Проверка наличия элементов
+    console.log('Date field:', dateField);
+    console.log('Time field:', timeField);
+    console.log('Record input:', recordInput);
+    console.log('Form:', form);
+
+    function updateAvailableRecords() {
+        const date = dateField.value;
+        const time = timeField.value;
+
+        console.log(`Обновление доступных услуг для: дата=${date}, время=${time}`);
+
+        if (date && time) {
+            recordsContainer.innerHTML = `
+                <div class="col-12 text-center py-4">
+                    <div class="spinner-border text-primary"></div>
+                    <p class="mt-2">Загрузка доступных услуг...</p>
+                </div>
+            `;
+
+            fetch(`{% url 'registration:get_free_records' %}?date_registration=${date}&time_registration=${time}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Ошибка получения данных');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Ответ сервера:', data);
+                    if (Array.isArray(data) && data.length > 0) {
+                        recordsContainer.innerHTML = data.map(record => `
+                            <div class="col-md-6 mb-3">
+                                <div class="record-option card h-100 ${recordInput.value == record.id ? 'selected' : ''}" data-id="${record.id}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${record.name}</h5>
+                                        <p class="card-text">
+                                            <small>Стоимость: ${record.price} руб.</small><br>
+                                            <small>Длительность: ${record.duration} мин.</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        recordsContainer.innerHTML = `
+                            <div class="col-12">
+                                <div class="alert alert-warning">Нет доступных услуг на выбранное время</div>
+                            </div>
+                        `;
+                    }
+                })
+
+
+    if (dateField && timeField) {
+        dateField.addEventListener('change', updateAvailableRecords);
+        timeField.addEventListener('change', updateAvailableRecords);
+
+        // Предварительное выполнение при наличии начальных значений
+        if (dateField.value && timeField.value) {
+            updateAvailableRecords();
+        }
+    }
+
+    // Обработка выбора услуги
+    recordsContainer.addEventListener('click', function(e) {
+        const recordOption = e.target.closest('.record-option');
+        if (recordOption) {
+            const recordId = recordOption.dataset.id;
+            recordInput.value = recordId;
+            console.log('Выбрана услуга ID:', recordId);
+
+            document.querySelectorAll('.record-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            recordOption.classList.add('selected');
+        }
+    });
+
+    // Валидация формы перед отправкой
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            console.log('Отправка формы. Значение выбранной услуги:', recordInput.value);
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    }
+});
+</script>
+
+
+{% endblock %}

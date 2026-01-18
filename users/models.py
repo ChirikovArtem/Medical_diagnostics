@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import PositiveIntegerField
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class User(AbstractUser):
     """Модель пользователь"""
 
@@ -12,15 +13,12 @@ class User(AbstractUser):
         verbose_name="Телефон",
         help_text="Введите номер телефона",
     )
-    city = models.CharField(
-        max_length=100,
-        verbose_name="Город"
-    )
+    city = models.CharField(max_length=100, verbose_name="Город")
     number_snils = PositiveIntegerField(
         verbose_name="номер СНИЛС",
-        null = True,
-        blank = True,
-        help_text="Введите телеграм chat_id",
+        null=True,
+        blank=True,
+        help_text="Введите номер СНИЛС",
     )
     tg_chat_id = models.CharField(
         max_length=50,

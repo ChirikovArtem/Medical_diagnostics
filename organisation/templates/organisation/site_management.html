@@ -1,0 +1,11 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<main class="container my-5">
+    <h2 class="text-center mb-4 fw-semibold text-dark">Редактирование данных ресторана</h2>
+    <div class="d-flex flex-column align-items-center gap-3">
+        <a href="{% url 'organisation:organisation_update' organisation.pk %}" class="btn btn-outline-secondary btn-lg" style="color: #343a40; border-color: #343a40;">Редактировать данные о медицинской организации</a>
+        <a href="{% url 'organisation:employee_list' %}" class="btn btn-outline-secondary btn-lg" style="color: #343a40; border-color: #343a40;">Редактировать данные о сотрудниках</a>
+        <a href="{% url 'organisation:record_list' %}" class="btn btn-outline-secondary btn-lg" style="color: #343a40; border-color: #343a40;">Редактировать данные о услугах</a>
+    </div>
+</main>
+{% endblock %}

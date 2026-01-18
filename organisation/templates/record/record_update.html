@@ -1,0 +1,14 @@
+{% extends 'users/base.html' %}
+{% block content %}
+
+    <div class="container mt-5">
+        <h1 class="mb-4">Редактировать услугу </h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="{% url 'organisation:record_list' %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<section class="bg-light p-5 rounded mb-5">
+    <!-- Кнопка "Назад" вверху -->
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3">Назад</a>
+
+    <h2 class="text-center mb-4">История записей на услуги</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            {% if registrations %}
+            <div class="record-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Услуга</th>
+                            <th>Кабинет</th>
+                            <th>Пациент</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                        <tr>
+                            <td>{{ reg.date_registration|date:"d.m.Y" }}</td>
+                            <td>{{ reg.time_registration|time:"H:i" }}</td>
+                            <td>{{ reg.registration.service }}</td>
+                            <td>№{{ reg.registration.cabinet_number }}</td>
+                            <td>{{ reg.patient.email }}</td>
+                            <td>
+                                <a href="{% url 'registration:registration_detail' reg.pk %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                У вас пока нет записей. <a href="{% url 'registration:registration_form' %}" class="alert-link">Записаться на услугу</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
