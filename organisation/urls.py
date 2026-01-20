@@ -4,25 +4,13 @@ from django.urls import path
 
 from organisation import views
 from organisation.apps import OrganisationConfig
-from organisation.views import (
-    AboutOrganisationViews,
-    ContactsViews,
-    EmployeeCreate,
-    EmployeeDelete,
-    EmployeeDetail,
-    EmployeeList,
-    EmployeeUpdate,
-    FeedbackViews,
-    HomeViews,
-    OrganisationUpdate,
-    RecordCreate,
-    RecordDelete,
-    RecordDetail,
-    RecordList,
-    RecordUpdate,
-    ServicesViews,
-    SiteManagementViews,
-)
+from organisation.views import (AboutOrganisationViews, ContactsViews,
+                                EmployeeCreate, EmployeeDelete, EmployeeDetail,
+                                EmployeeList, EmployeeUpdate, FeedbackViews,
+                                HomeViews, OrganisationUpdate, RecordCreate,
+                                RecordDelete, RecordDetail, RecordList,
+                                RecordUpdate, ServicesViews,
+                                SiteManagementViews)
 
 app_name = OrganisationConfig.name
 
