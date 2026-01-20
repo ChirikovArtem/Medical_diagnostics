@@ -1,15 +1,24 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import (LoginView, LogoutView,
-                                       PasswordResetCompleteView,
-                                       PasswordResetConfirmView,
-                                       PasswordResetDoneView,
-                                       PasswordResetView)
+from django.contrib.auth.views import (
+    LoginView,
+    LogoutView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+)
 from django.urls import path, reverse_lazy
 
 from users.apps import UsersConfig
-from users.views import (UserCreateViews, UserDelete, UserDetailView,
-                         UserListView, UserUpdateView, email_verification)
+from users.views import (
+    UserCreateViews,
+    UserDelete,
+    UserDetailView,
+    UserListView,
+    UserUpdateView,
+    email_verification,
+)
 
 app_name = UsersConfig.name
 

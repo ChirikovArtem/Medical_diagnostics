@@ -6,7 +6,10 @@ from django.forms import BooleanField
 
 from users.models import User
 
-def generate_time_choices(start_time_str="07:00", end_time_str="19:00", interval_minutes=30):
+
+def generate_time_choices(
+    start_time_str="07:00", end_time_str="19:00", interval_minutes=30
+):
     start_time = datetime.strptime(start_time_str, "%H:%M")
     end_time = datetime.strptime(end_time_str, "%H:%M")
     delta = timedelta(minutes=interval_minutes)
@@ -19,6 +22,7 @@ def generate_time_choices(start_time_str="07:00", end_time_str="19:00", interval
         current_time += delta
 
     return choices
+
 
 class StyleFormMixin:
     """Стилизация форм"""
@@ -46,11 +50,13 @@ class StyleFormMixin:
                 )
             if field_name == "time_registration":
                 # Используйте выбранный подход — выбор фиксированных временных интервалов
-                self.fields['time_registration'] = forms.ChoiceField(
+                self.fields["time_registration"] = forms.ChoiceField(
                     choices=generate_time_choices(),
-                    widget=forms.Select(attrs={
-                        "class": "form-control",
-                    })
+                    widget=forms.Select(
+                        attrs={
+                            "class": "form-control",
+                        }
+                    ),
                 )
 
 

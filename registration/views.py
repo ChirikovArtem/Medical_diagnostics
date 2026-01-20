@@ -5,8 +5,14 @@ from django.http import JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.decorators.http import require_GET
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 
 from organisation.models import Record
 from registration.forms import RegistrationForm
@@ -24,21 +30,20 @@ class RegistrationCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # Проверка наличия уже существующей записи
-        date = form.cleaned_data['date_registration']
-        time = form.cleaned_data['time_registration']
-        registration_obj = form.cleaned_data['registration']
+        date = form.cleaned_data["date_registration"]
+        time = form.cleaned_data["time_registration"]
+        registration_obj = form.cleaned_data["registration"]
         user = self.request.user
 
         # Используем правильное имя поля для фильтрации
         exists = Registration.objects.filter(
-            patient=user,
             date_registration=date,
             time_registration=time,
-            registration=registration_obj
+            registration=registration_obj,
         ).exists()
 
         if exists:
-            form.add_error(None, "Вы уже записаны на эту услугу в указанное время.")
+            form.add_error(None, "Данное время уже занято.")
             return self.form_invalid(form)
 
         registration = form.save()
@@ -51,6 +56,7 @@ class RegistrationCreate(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["all_records"] = Record.objects.all()
         return context
+
 
 @require_GET
 def get_available_records(request):
@@ -151,4 +157,3 @@ class PersonalAccountViews(LoginRequiredMixin, TemplateView):
         ).order_by("date_registration")
 
         return context
-

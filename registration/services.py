@@ -1,13 +1,15 @@
 from datetime import datetime, timedelta
+
 from organisation.models import Record
 from registration.models import Registration
 
-def get_free_records(
-    date_registration, time_registration, min_capacity=1
-):
+
+def get_free_records(date_registration, time_registration, min_capacity=1):
     """Возвращает свободные записи, учитывая фиксированную длительность 30 минут"""
     requested_start = datetime.combine(date_registration, time_registration)
-    requested_end = requested_start + timedelta(minutes=30)  # длительность услуги - 30 минут
+    requested_end = requested_start + timedelta(
+        minutes=30
+    )  # длительность услуги - 30 минут
 
     now = datetime.now()
 
@@ -22,7 +24,10 @@ def get_free_records(
 
     for registration in registrations:
         # Проверка существования связанного Record
-        if not hasattr(registration, 'registration') or registration.registration is None:
+        if (
+            not hasattr(registration, "registration")
+            or registration.registration is None
+        ):
             continue
 
         res_start = datetime.combine(

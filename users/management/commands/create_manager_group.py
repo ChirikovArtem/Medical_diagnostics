@@ -2,8 +2,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-
-from organisation.models import Organisation, Record, Employee
+from organisation.models import Employee, Organisation, Record
 from users.models import User
 
 
@@ -42,7 +41,9 @@ class Command(BaseCommand):
         for perm_code in ["change", "add", "delete"]:
             perm_name = f"{perm_code}_record"
             try:
-                perm = Permission.objects.get(codename=perm_name, content_type=ct_record)
+                perm = Permission.objects.get(
+                    codename=perm_name, content_type=ct_record
+                )
                 permissions_list.append(perm)
             except Permission.DoesNotExist:
                 self.stdout.write(f"Права {perm_name} не найдены.")
