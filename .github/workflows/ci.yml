@@ -46,7 +46,7 @@ jobs:
 
     - name: Run tests
       run: python manage.py test
-      working-directory: ./Medical_diagnostics
+      working-directory: C:\Users\chiri\PycharmProjects\Medical_diagnostics>
 
   build:
     needs: test
