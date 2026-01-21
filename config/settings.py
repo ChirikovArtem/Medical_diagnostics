@@ -62,7 +62,7 @@ DATABASES = {
         "NAME": "medical_diagnostics",
         "USER": "postgres",
         "PASSWORD": "487369",
-        "HOST": "localhost",
+        "HOST": "db",
         "PORT": "5432",
     }
 }
