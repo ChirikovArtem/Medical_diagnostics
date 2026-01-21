@@ -65,7 +65,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+          echo 'SECRET_KEY=${{ secrets.SECRET_KEY }}' >> "$GITHUB_ENV"
           echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/test_db" >> $GITHUB_ENV
 
       - name: Wait for PostgreSQL
