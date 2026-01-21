@@ -62,7 +62,7 @@ DATABASES = {
         "NAME": "medical_diagnostics",
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
+        "HOST": "db",
         "PORT": os.getenv("PORT"),
     }
 }
