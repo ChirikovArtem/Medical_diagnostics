@@ -32,7 +32,7 @@ class Registration(models.Model):
 
     def __str__(self):
         return (
-            f"Пациент {self.patient} записался на {self.registration}"
+            f"Пациент {self.patient} записался на {self.registration} "
             f"Дата: {self.date_registration} время: {self.time_registration}"
         )
 

@@ -85,3 +85,56 @@ docker-compose up -d --build
 Модуль для добавления, изменения, удаления информации о сотрудниках
 ### 5.Organisation
 Модуль для изменения информации о медицинской организации
+### 6.Покрытие кода тестами:
+```
+Name                                                Stmts   Miss  Cover
+-----------------------------------------------------------------------
+config\__init__.py                                      0      0   100%
+config\asgi.py                                          4      4     0%
+config\settings.py                                     36      0   100%
+config\urls.py                                          7      0   100%
+config\wsgi.py                                          4      4     0%
+manage.py                                              11      2    82%
+organisation\__init__.py                                0      0   100%
+organisation\admin.py                                  17      0   100%
+organisation\apps.py                                    3      0   100%
+organisation\context_processors.py                      5      0   100%
+organisation\forms.py                                  15      0   100%
+organisation\migrations\0001_initial.py                 6      0   100%
+organisation\migrations\__init__.py                     0      0   100%
+organisation\models.py                                 38      1    97%
+organisation\tests.py                                   0      0   100%
+organisation\urls.py                                   10      1    90%
+organisation\views.py                                 117     26    78%
+registration\__init__.py                                0      0   100%
+registration\admin.py                                   7      0   100%
+registration\apps.py                                    3      0   100%
+registration\forms.py                                  37      8    78%
+registration\migrations\0001_initial.py                 7      0   100%
+registration\migrations\__init__.py                     0      0   100%
+registration\models.py                                 13      0   100%
+registration\services.py                               20      1    95%
+registration\tests.py                                  94     18    81%
+registration\urls.py                                    6      0   100%
+registration\views.py                                  86     40    53%
+users\__init__.py                                       0      0   100%
+users\admin.py                                          5      0   100%
+users\apps.py                                           3      0   100%
+users\forms.py                                         41      1    98%
+users\management\__init__.py                            0      0   100%
+users\management\commands\__init__.py                   0      0   100%
+users\management\commands\create_admin_group.py        20     20     0%
+users\management\commands\create_manager_group.py      45     45     0%
+users\management\commands\csu.py                       10     10     0%
+users\managers.py                                      14      1    93%
+users\migrations\0001_initial.py                        8      0   100%
+users\migrations\0002_alter_user_number_snils.py        4      0   100%
+users\migrations\0003_alter_user_managers.py            4      0   100%
+users\migrations\__init__.py                            0      0   100%
+users\models.py                                        21      0   100%
+users\tests.py                                         43      0   100%
+users\urls.py                                          10      1    90%
+users\views.py                                         58      4    93%
+-----------------------------------------------------------------------
+TOTAL                                                 832    187    78%
+```

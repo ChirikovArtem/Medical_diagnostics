@@ -107,7 +107,7 @@
         <div class="container">
           {% if user.is_authenticated %}
             {% if is_admin %}
-              <a href="{% url 'organisation:record_list' %}" class="btn btn-outline-light btn-sm btn-custom me-2">Управление записями</a>
+              <a href="{% url 'registration:registration_list' %}" class="btn btn-outline-light btn-sm btn-custom me-2">Управление записями</a>
             {% elif is_manager %}
               <a href="{% url 'organisation:site_management' %}" class="btn btn-outline-light btn-sm btn-custom me-2">Управление сайтом</a>
             {% else %}

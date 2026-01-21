@@ -1,6 +1,6 @@
 {% extends 'users/base.html' %}
 
-{% block content
+{% block content %}
 <section class="bg-light p-5 rounded mb-5">
     {% if object %}
     <h2 class="text-center mb-4">Редактирование</h2>
@@ -15,10 +15,10 @@
                     {{ form.as_p }}
                 </div>
                 <button type="submit" class="btn btn-primary">
-                    % if object %}
-                    Изменить
+                    {% if object %}
+                        Изменить
                     {% else %}
-                    Сохранить
+                        Сохранить
                     {% endif %}
                 </button>
                 <a href="{% url 'organisation:employee_list' %}" class="btn btn-secondary">Отмена</a>

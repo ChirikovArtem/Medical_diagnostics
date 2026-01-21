@@ -16,7 +16,7 @@ class Command(BaseCommand):
         permissions_list = []
 
         ct_organisation = ContentType.objects.get_for_model(Organisation)
-        for perm_code in ["change", "add", "delete"]:
+        for perm_code in ["view", "change", "add", "delete"]:
             perm_name = f"{perm_code}_organisation"
             try:
                 perm = Permission.objects.get(
@@ -26,9 +26,8 @@ class Command(BaseCommand):
             except Permission.DoesNotExist:
                 self.stdout.write(f"Права {perm_name} не найдены.")
 
-        # Модель User
         ct_user = ContentType.objects.get_for_model(User)
-        for perm_code in ["change", "add", "delete"]:
+        for perm_code in ["view", "change", "add", "delete"]:
             perm_name = f"{perm_code}_user"
             try:
                 perm = Permission.objects.get(codename=perm_name, content_type=ct_user)
@@ -36,9 +35,8 @@ class Command(BaseCommand):
             except Permission.DoesNotExist:
                 self.stdout.write(f"Права {perm_name} не найдены.")
 
-        # Модель Service
         ct_record = ContentType.objects.get_for_model(Record)
-        for perm_code in ["change", "add", "delete"]:
+        for perm_code in ["view", "change", "add", "delete"]:
             perm_name = f"{perm_code}_record"
             try:
                 perm = Permission.objects.get(
@@ -48,9 +46,8 @@ class Command(BaseCommand):
             except Permission.DoesNotExist:
                 self.stdout.write(f"Права {perm_name} не найдены.")
 
-        # Модель Employee
         ct_employee = ContentType.objects.get_for_model(Employee)
-        for perm_code in ["change", "add", "delete"]:
+        for perm_code in ["view", "change", "add", "delete"]:
             perm_name = f"{perm_code}_employee"
             try:
                 perm = Permission.objects.get(

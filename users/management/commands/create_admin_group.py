@@ -6,7 +6,7 @@ from registration.models import Registration
 
 
 class Command(BaseCommand):
-    """Кастомная команда для создания группы Менеджер для управления записями"""
+    """Кастомная команда для создания группы Администратор для управления записями"""
 
     def handle(self, *args, **kwargs):
         group_name = "Администратор"

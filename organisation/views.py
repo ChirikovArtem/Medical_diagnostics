@@ -117,7 +117,7 @@ class EmployeeDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     """Контроллер детализации сотрудника"""
 
     model = Employee
-    template_name = "organisation/employee_detail.html"
+    template_name = "employee/employee_detail.html"
     context_object_name = "employee"
     permission_required = "organisation.view_employee"
 
@@ -126,7 +126,7 @@ class EmployeeList(ListView):
     """Контроллер вывода списка сотрудников"""
 
     model = Employee
-    template_name = "organisation/employee_list.html"
+    template_name = "employee/employee_list.html"
     context_object_name = "employees"
 
 
@@ -135,7 +135,7 @@ class EmployeeCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
     model = Employee
     form_class = EmployeeForm
-    template_name = "organisation/employee_form.html"
+    template_name = "employee/employee_form.html"
     success_url = reverse_lazy("organisation:employee_list")
     permission_required = "organisation.add_employee"
 
@@ -144,7 +144,7 @@ class EmployeeDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     """Контроллер удаления сотрудников"""
 
     model = Employee
-    template_name = "organisation/employee_delete.html"
+    template_name = "employee/employee_delete.html"
     success_url = reverse_lazy("organisation:employee_list")
     context_object_name = "employee"
     permission_required = "organisation.delete_employee"
@@ -155,7 +155,7 @@ class EmployeeUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
     model = Employee
     form_class = EmployeeForm
-    template_name = "organisation/employee_form.html"
+    template_name = "employee/employee_form.html"
     success_url = reverse_lazy("organisation:employee_list")
     permission_required = "organisation.change_employee"
 

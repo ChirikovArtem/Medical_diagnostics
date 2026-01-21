@@ -23,13 +23,11 @@ class RegistrationCreate(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("registration:personal_account")
 
     def form_valid(self, form):
-        # Проверка наличия уже существующей записи
         date = form.cleaned_data["date_registration"]
         time = form.cleaned_data["time_registration"]
         registration_obj = form.cleaned_data["registration"]
         user = self.request.user
 
-        # Используем правильное имя поля для фильтрации
         exists = Registration.objects.filter(
             date_registration=date,
             time_registration=time,

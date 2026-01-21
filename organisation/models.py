@@ -86,8 +86,8 @@ class Record(models.Model):
 
     def __str__(self):
         return (
-            f"{self.service} проводится в кабинете №{self.cabinet_number}."
-            f"Специалист - {self.doctor}"
+            f"Терапевт проводится в кабинете №{self.cabinet_number}. "
+            f"Специалист - {self.doctor.first_name} {self.doctor.last_name}"
         )
 
     class Meta:

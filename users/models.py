@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import PositiveIntegerField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from users.managers import CustomUserManager
+
 
 class User(AbstractUser):
     """Модель пользователь"""
@@ -33,6 +35,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = "Пользователь"
