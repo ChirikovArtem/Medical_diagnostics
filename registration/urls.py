@@ -2,14 +2,9 @@ from django.urls import path
 
 from registration.apps import RegistrationConfig
 from registration.services import get_free_records
-from registration.views import (
-    PersonalAccountViews,
-    RegistrationCreate,
-    RegistrationDelete,
-    RegistrationDetail,
-    RegistrationList,
-    RegistrationUpdate,
-)
+from registration.views import (PersonalAccountViews, RegistrationCreate,
+                                RegistrationDelete, RegistrationDetail,
+                                RegistrationList, RegistrationUpdate)
 
 app_name = RegistrationConfig.name
 
