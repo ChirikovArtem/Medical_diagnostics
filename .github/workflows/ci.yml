@@ -35,11 +35,6 @@ jobs:
           POSTGRES_PASSWORD: 487369
         ports:
           - 5432:5432
-        healthcheck:
-          test: ["CMD-SHELL", "pg_isready -U postgres"]
-          interval: 10s
-          timeout: 5s
-          retries: 5
       redis:
         image: redis:latest
         ports:
@@ -75,6 +70,7 @@ jobs:
           echo "POSTGRES_PASSWORD=487369" >> $GITHUB_ENV
           echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
           echo "PORT=5432" >> $GITHUB_ENV
+
 
       - name: Wait for PostgreSQL
         run: |
