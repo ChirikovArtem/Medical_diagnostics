@@ -102,12 +102,14 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
 
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
 
       - name: Check Docker
         run: docker --version
+
 
       - name: Debug Secrets (optional)
         run: |
@@ -117,7 +119,6 @@ jobs:
       - name: Log in to Docker Hub
         run: |
           printf '%s' "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
-  
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
