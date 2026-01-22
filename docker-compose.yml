@@ -1,7 +1,17 @@
 services:
   web:
     build: .
-    command:  sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    command: >
+      sh -c "
+        while ! pg_isready -h $$POSTGRES_HOST -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB; do
+          echo 'Waiting for PostgreSQL...';
+          sleep 2;
+        done;
+        echo 'PostgreSQL is ready. Running migrations and server...';
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        gunicorn config.wsgi:application --bind 0.0.0.0:8000
+      "
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
