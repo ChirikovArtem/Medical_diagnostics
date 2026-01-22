@@ -1,0 +1,26 @@
+{% extends 'users/base.html' %}
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+<h2>Список пользователей</h2>
+<ul class="list-group">
+    {% for user in users %}
+        <li class="list-group-item">
+            {{ user.email }}
+                {% if perms.users.can_block_users %}
+
+                        <form action="{% url 'users:block_user' user.pk %}" method="post">
+                            {% csrf_token %}
+                             {% if user.is_active %}
+                             <button class="btn btn-primary">Заблокировать пользователя</button>
+                            {% else %}
+                             <button class="btn btn-secondary">Разблокировать пользователя</button>
+                            {% endif %}
+                        </form>
+
+                {% endif %}
+            </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<!-- Заголовок страницы -->
+<div class="container my-4">
+    <div class="text-center">
+        <h1 class="display-3 fw-semibold" style="letter-spacing: 1px;">Обратная связь</h1>
+    </div>
+</div>
+
+<!-- Сообщение об успешной отправке или ошибка -->
+{% if message_sent %}
+<div class="container mb-4">
+    <div class="alert alert-success text-center" role="alert">
+        Ваше сообщение отправлено! Спасибо за отзыв.
+    </div>
+</div>
+{% endif %}
+
+<!-- Форма обратной связи -->
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="fw-semibold text-center mb-4" style="letter-spacing: 1px;">Оставьте свой отзыв</h2>
+            <form method="post" action="{% url 'organisation:feedback_submit' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Ваше имя</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label fw-semibold">Ваш email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label fw-semibold">Ваш отзыв</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary fw-semibold">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
