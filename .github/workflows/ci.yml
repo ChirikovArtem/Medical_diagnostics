@@ -110,15 +110,17 @@ jobs:
       - name: Check Docker
         run: docker --version
 
-
       - name: Debug Secrets (optional)
         run: |
           echo "Username length: $(printf '%s' '${{ secrets.DOCKER_HUB_USERNAME }}' | wc -c)"
           echo "Token length: $(printf '%s' '${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' | wc -c)"
 
+
       - name: Log in to Docker Hub
         run: |
-          printf '%s' "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" > /tmp/docker-token
+          cat /tmp/docker-token | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          rm /tmp/docker-token
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
