@@ -62,16 +62,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Set environment variables
-        run: |
-          printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-          printf 'POSTGRES_DB=%s\n' "medical_diagnostics" >> $GITHUB_ENV
-          printf 'POSTGRES_USER=%s\n' "postgres" >> $GITHUB_ENV
-          printf 'POSTGRES_PASSWORD=%s\n' "487369" >> $GITHUB_ENV
-          printf 'POSTGRES_HOST=%s\n' "localhost" >> $GITHUB_ENV
-          printf 'PORT=%s\n' "5432" >> $GITHUB_ENV
-
-
       - name: Wait for PostgreSQL
         run: |
           for i in {1..30}; do
@@ -89,10 +79,24 @@ jobs:
         run: |
           echo "Applying migrations..."
           python manage.py migrate --noinput
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          POSTGRES_DB: medical_diagnostics
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 487369
+          POSTGRES_HOST: localhost
+          PORT: 5432
 
       - name: Run tests
         run: python manage.py test
         timeout-minutes: 10
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          POSTGRES_DB: medical_diagnostics
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 487369
+          POSTGRES_HOST: localhost
+          PORT: 5432
 
   build:
     needs: test
