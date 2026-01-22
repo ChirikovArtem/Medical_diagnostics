@@ -64,12 +64,12 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-          echo "POSTGRES_DB=medical_diagnostics" >> $GITHUB_ENV
-          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
-          echo "POSTGRES_PASSWORD=487369" >> $GITHUB_ENV
-          echo "POSTGRES_HOST=localhost" >> $GITHUB_ENV
-          echo "PORT=5432" >> $GITHUB_ENV
+          printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+          printf 'POSTGRES_DB=%s\n' "medical_diagnostics" >> $GITHUB_ENV
+          printf 'POSTGRES_USER=%s\n' "postgres" >> $GITHUB_ENV
+          printf 'POSTGRES_PASSWORD=%s\n' "487369" >> $GITHUB_ENV
+          printf 'POSTGRES_HOST=%s\n' "localhost" >> $GITHUB_ENV
+          printf 'PORT=%s\n' "5432" >> $GITHUB_ENV
 
 
       - name: Wait for PostgreSQL
