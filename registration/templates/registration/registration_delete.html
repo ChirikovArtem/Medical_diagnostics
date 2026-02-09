@@ -1,0 +1,23 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+       <form class="row" method="post">
+         <div class="card">
+              <p class="card-text">Действительно хотите удалить запись на {{ registration.date_registration|date:"d.m.Y" }}?</p>
+             <div class="card-body">
+                 {% csrf_token %}
+             </div>
+             <button type="submit" class="btn btn-primary">
+                 Удалить
+             </button>
+             <a class="btn btn-secondary" href="{% url 'registration:registration_list' %}" role="button">Отмена</a>
+         </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

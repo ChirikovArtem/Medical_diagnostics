@@ -1,0 +1,31 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="text-center">
+<h2>Список сотрудников</h2>
+</div>
+<div class="container">
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for employee in employees %}
+        <div class="col-3">
+
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title pricing-card-title">Сотрудник {{ employee.first_name }} {{ employee.last_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Должность: {{ employee.job_title }} </p>
+                    <a class="btn btn-primary" href="{% url 'organisation:employee_detail' employee.pk %}" role="button">Подробнее</a>
+                    <a class="btn btn-secondary" href="{% url 'organisation:employee_update' employee.pk %}" role="button">Редактировать</a>
+                    <a href="{% url 'organisation:employee_delete' employee.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a class="btn btn-primary" href="{% url 'organisation:employee_create' %}" role="button">Добавить сотрудника</a>
+    <a href="{% url 'organisation:home' %}" class="btn btn-secondary">Назад</a>
+</div>
+
+{% endblock %}

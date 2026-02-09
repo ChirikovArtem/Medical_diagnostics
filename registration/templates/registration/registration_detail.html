@@ -1,0 +1,25 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<section class="bg-light p-5 rounded mb-5">
+    <h2 class="text-center mb-4">Информация о записи на услугу</h2>
+    <div class="row align-items-center">
+        <!-- Блок с информацией  -->
+        <div class="col-lg-6">
+            <div class="card border-0 bg-transparent">
+                <div class="card-body">
+                    <p class="fs-5"><i class="bi bi-calendar-check me-2"></i> Пациент: {{ registration.patient }}</p>
+                    <p class="fs-5"><i class="bi bi-calendar-check me-2"></i> Дата: {{ registration.date_registration|date:"d.m.Y" }}</p>
+                    <p class="fs-5"><i class="bi bi-clock me-2"></i> Время: {{ registration.time_registration|time:"H:i" }}</p>
+                    <p class="fs-5"><i class="bi bi-gear me-2"></i> Услуга: {{ registration.registration.service }}</p>
+                    <p class="fs-5"><i class="bi bi-building me-2"></i> Кабинет №{{ registration.registration.cabinet_number }}</p>
+                    <p class="fs-5"><i class="bi bi-person-circle me-2"></i> Специалист: {{ registration.registration.doctor }}</p>
+                    {% if registration.registration.description_service %}
+                    <p class="fs-5"><i class="bi bi-info-circle me-2"></i> Описание услуги: {{ registration.registration.description_service }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

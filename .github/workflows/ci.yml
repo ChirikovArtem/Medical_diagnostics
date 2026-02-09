@@ -1,0 +1,170 @@
+name: Django CI
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run Flake8
+        run: flake8 .
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_DB: medical_diagnostics
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 487369
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            if pg_isready -h localhost -p 5432 -U postgres; then
+              echo "PostgreSQL ready!"
+              exit 0
+            fi
+            echo "Waiting for PostgreSQL... ($i/30)"
+            sleep 2
+          done
+          echo "PostgreSQL not ready after 60s!"
+          exit 1
+
+      - name: Run migrations
+        run: |
+          echo "Applying migrations..."
+          python manage.py migrate --noinput
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          POSTGRES_DB: medical_diagnostics
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 487369
+          POSTGRES_HOST: localhost
+          PORT: 5432
+
+      - name: Run tests
+        run: python manage.py test
+        timeout-minutes: 10
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          POSTGRES_DB: medical_diagnostics
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 487369
+          POSTGRES_HOST: localhost
+          PORT: 5432
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Check Docker
+        run: docker --version
+
+      - name: Debug Secrets (optional)
+        run: |
+          echo "Username length: $(printf '%s' '${{ secrets.DOCKER_HUB_USERNAME }}' | wc -c)"
+          echo "Token length: $(printf '%s' '${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}' | wc -c)"
+
+
+      - name: Log in to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" > /tmp/docker-token
+          cat /tmp/docker-token | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+          rm /tmp/docker-token
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Add known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+
+      - name: Check Docker installation
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} 'docker --version || echo "Docker not installed"'
+
+      - name: Install Docker if not present
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} '
+          if ! which docker > /dev/null; then
+            echo "Installing Docker..."
+            sudo apt update
+            sudo apt install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+          fi
+          '
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          docker stop myapp || true
+          docker rm myapp || true
+          docker run -d --name myapp -p 80:8000 ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          EOF

@@ -1,0 +1,60 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Заголовок -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold display-4 text-primary">Список услуг</h2>
+    </div>
+
+    <!-- Если есть записи -->
+    {% if records %}
+        {% for record in records %}
+        <div class="card mb-4 shadow-sm rounded-3 border-0">
+            <div class="card-header bg-white border-0 pt-4 pb-2 text-center">
+                <h5 class="fw-semibold text-secondary">{{ record.get_service_display }}</h5>
+            </div>
+            <div class="card-body px-4 pt-2">
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold text-muted">Кабинет №:</span>
+                    <span class="text-dark">{{ record.cabinet_number }}</span>
+                </div>
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold text-muted">Специалист:</span>
+                    <span class="text-dark">{{ record.doctor }}</span>
+                </div>
+                <div class="d-flex flex-column">
+                    <span class="fw-semibold text-muted mb-1">Описание услуги:</span>
+                    <p class="mb-0 text-body">{{ record.description_service }}</p>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 d-flex justify-content-center gap-3 py-3">
+                <a class="btn btn-outline-primary btn-sm px-4" href="{% url 'organisation:record_detail' record.pk %}">
+                    Подробнее
+                </a>
+                <a class="btn btn-outline-secondary btn-sm px-4" href="{% url 'organisation:record_update' record.pk %}">
+                    Редактировать
+                </a>
+                <a class="btn btn-outline-danger btn-sm px-4" href="{% url 'organisation:record_delete' record.pk %}">
+                    Удалить
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <p class="fs-4 text-muted">Нет записей</p>
+        </div>
+    {% endif %}
+
+    <!-- Кнопки действий -->
+    <div class="d-flex justify-content-center flex-wrap gap-3 mt-5">
+        <a class="btn btn-primary btn-lg px-5" href="{% url 'organisation:record_create' %}">
+            Добавить услугу
+        </a>
+        <a class="btn btn-outline-secondary btn-lg px-5" href="{% url 'organisation:home' %}">
+            Назад
+        </a>
+    </div>
+</div>
+{% endblock %}
